@@ -16,7 +16,7 @@ steps:
 - task: SnykSecurityScan@1
   inputs:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
-    testType: 'app'
+    testType: 'code'
     monitorWhen: 'always'
     failOnIssues: true
 
@@ -34,7 +34,7 @@ steps:
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  condition: false
+  condition: true
   displayName: 'Publish step'
   inputs:
     command: 'publish'
@@ -43,15 +43,15 @@ steps:
     zipAfterPublish: true
 
 - task: CopyFiles@2
-  condition: false
+  condition: true
   displayName: 'Copy Terraform files to artifacts'
   inputs:
     SourceFolder: Terraform
     TargetFolder: '$(build.artifactstagingdirectory)/Terraform'
 
 - task: PublishBuildArtifacts@1
-  condition: false
+  condition: true
   displayName: 'Build Artifact Step'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'HelloWorldDrop'
+    ArtifactName: 'HelloWorldAppDrop'
