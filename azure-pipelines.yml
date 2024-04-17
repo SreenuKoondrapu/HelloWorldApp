@@ -45,12 +45,12 @@ steps:
   condition: true
   displayName: Build and push an image to container registry
   inputs:
-  command: buildAndPush
-  repository: $(imageRepository)
-  dockerfile: $(dockerfilePath)
-  containerRegistry: 'HW Container Registry Connection'
-  tags: |
-    $(tag)
+    command: buildAndPush
+    repository: $(imageRepository)
+    dockerfile: $(dockerfilePath)
+    containerRegistry: 'HW Container Registry Connection'
+    tags: |
+      $(tag)
 
 - task: DotNetCoreCLI@2
   displayName: 'Build step'
