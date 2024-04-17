@@ -77,3 +77,10 @@ steps:
 - task: SonarCloudPublish@1
   inputs:
     pollingTimeoutSec: '300'
+
+- task: AzureWebApp@1
+  displayName: 'Azure App Service Deploy: website'
+  inputs:
+    azureSubscription: 'Resource Manager - HELLOWORLD'
+    appName: 'HelloWorldAppService17042024'
+    package: '$(Build.artifactstagingdirectory)/*.zip'
