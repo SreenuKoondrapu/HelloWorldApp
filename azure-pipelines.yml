@@ -26,6 +26,7 @@ steps:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'app'
     failOnIssues: false
+    
 - task: DotNetCoreCLI@2
   displayName: 'Build step'
   inputs:
