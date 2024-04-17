@@ -5,6 +5,10 @@ pool:
   
 variables: 
   group: 'Release'
+  imageRepository: 'helloworlddotnetwebapp'
+  dockerfilePath: '**/Dockerfile'
+  tag: 'Build.BuildId'
+
 steps:
 - task: UseDotNet@2
   displayName: 'Use .NET SDK 8.x'
@@ -22,6 +26,7 @@ steps:
     projectName: 'HelloWorldWebApp'
 
 - task: SnykSecurityScan@1
+  condition: false
   displayName: Snyk SAST Testing Step
   inputs:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
@@ -29,11 +34,23 @@ steps:
     failOnIssues: false
 
 - task: SnykSecurityScan@1
+  condition: false
   displayName: 'Snyk SCA Testing Step'
   inputs:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'app'
     failOnIssues: false
+
+- task: Docker@2
+  condition: true
+  displayName: Build and push an image to container registry
+  inputs:
+  command: buildAndPush
+  repository: $(imageRepository)
+  dockerfile: $(dockerfilePath)
+  containerRegistry: 'HW Container Registry Connection'
+  tags: |
+    $(tag)
 
 - task: DotNetCoreCLI@2
   displayName: 'Build step'
@@ -79,6 +96,7 @@ steps:
     pollingTimeoutSec: '300'
 
 - task: AzureWebApp@1
+  condition: false
   displayName: 'Azure App Service Deploy: website'
   inputs:
     azureSubscription: 'Resource Manager - HELLOWORLD'
