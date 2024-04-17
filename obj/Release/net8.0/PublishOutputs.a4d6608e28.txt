@@ -1,0 +1,7 @@
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\HelloWorldWebApp.exe
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\appsettings.Development.json
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\appsettings.json
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\HelloWorldWebApp.dll
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\HelloWorldWebApp.deps.json
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\HelloWorldWebApp.runtimeconfig.json
+D:\HelloWorld\HelloWorldWebApp\obj\Release\net8.0\PubTmp\Out\HelloWorldWebApp.pdb

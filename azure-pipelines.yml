@@ -1,0 +1,57 @@
+trigger:
+- '*'
+pool:
+  name: 'MyAgentPool' 
+  
+variables: 
+  group: 'Release'
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK 8.x'
+  inputs:
+    packageType: sdk
+    version: '8.x'
+    includePreviewVersions: true
+
+- task: SnykSecurityScan@1
+  inputs:
+    serviceConnectionEndpoint: 'helloworldsnykconnection'
+    testType: 'app'
+    monitorWhen: 'always'
+    failOnIssues: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build step'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore project dependencies'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  condition: false
+  displayName: 'Publish step'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: CopyFiles@2
+  condition: false
+  displayName: 'Copy Terraform files to artifacts'
+  inputs:
+    SourceFolder: Terraform
+    TargetFolder: '$(build.artifactstagingdirectory)/Terraform'
+
+- task: PublishBuildArtifacts@1
+  condition: false
+  displayName: 'Build Artifact Step'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'HelloWorldDrop'
