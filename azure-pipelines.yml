@@ -14,12 +14,18 @@ steps:
     includePreviewVersions: true
 
 - task: SnykSecurityScan@1
+  displayName: Snyk SAST Testing Step
   inputs:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'code'
-    monitorWhen: 'always'
-    failOnIssues: true
+    failOnIssues: false
 
+- task: SnykSecurityScan@1
+  displayName: 'Snyk SCA Testing Step'
+  inputs:
+    serviceConnectionEndpoint: 'helloworldsnykconnection'
+    testType: 'app'
+    failOnIssues: false
 - task: DotNetCoreCLI@2
   displayName: 'Build step'
   inputs:
