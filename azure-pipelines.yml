@@ -13,6 +13,14 @@ steps:
     version: '8.x'
     includePreviewVersions: true
 
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sonartokenforazuredevops'
+    organization: 'sreenukoondrapukey'
+    scannerMode: 'MSBuild'
+    projectKey: 'SreenuKoondrapu_HelloWorldWebApp'
+    projectName: 'HelloWorldWebApp'
+
 - task: SnykSecurityScan@1
   displayName: Snyk SAST Testing Step
   inputs:
@@ -26,7 +34,7 @@ steps:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'app'
     failOnIssues: false
-    
+
 - task: DotNetCoreCLI@2
   displayName: 'Build step'
   inputs:
@@ -41,7 +49,6 @@ steps:
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
-  condition: true
   displayName: 'Publish step'
   inputs:
     command: 'publish'
@@ -62,3 +69,11 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'HelloWorldAppDrop'
+
+- task: SonarCloudAnalyze@1
+  inputs:
+    jdkversion: 'JAVA_HOME_17_X64'
+
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
