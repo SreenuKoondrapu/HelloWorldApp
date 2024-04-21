@@ -20,7 +20,7 @@ variables:
 
 stages:
 - stage: Build
-  condition: false
+  condition: true
   displayName: Build stage
   jobs:
   - job: Build
