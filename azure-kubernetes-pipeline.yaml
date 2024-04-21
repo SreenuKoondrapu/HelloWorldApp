@@ -1,0 +1,87 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'edbc2014-4715-4929-8edf-409a0aa8ff97'
+  imageRepository: 'helloworlddotnetwebapp'
+  containerRegistry: 'devopswebappcontreg.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.BuildId)'
+  imagePullSecret: 'secret'
+  # Agent VM image name
+  name: 'MyAgentPool'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: $(name)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: 'HW Container Registry Connection'
+        tags: |
+          $(tag)
+
+    - publish: manifests
+      artifact: manifests
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      name: $(name)
+    environment: 'HelloWorldDev'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: manifests
+          - task: KubernetesManifest@1
+            displayName: Create imagePullSecret
+            inputs:
+              action: 'createSecret'
+              connectionType: 'azureResourceManager'
+              azureSubscriptionConnection: 'Free Trial (e50539cc-3930-4311-a790-a77009535076)'
+              azureResourceGroup: 'helloworld-webapp-rg'
+              kubernetesCluster: 'hwkube-21422'
+              namespace: 'default'
+              secretName: '$(imagePullSecret)'
+              dockerRegistryEndpoint: 'HW Container Registry Connection'
+
+          - task: KubernetesManifest@1
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: 'deploy'
+              connectionType: 'azureResourceManager'
+              azureSubscriptionConnection: 'Kubernetes Service Connection'
+              azureResourceGroup: 'helloworld-webapp-rg'
+              kubernetesCluster: 'hwkube-21422'
+              namespace: 'default'
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              containers: '$(containerRegistry)/$(imageRepository):$(tag)'
+              imagePullSecrets: '$(imagePullSecret)'
+
