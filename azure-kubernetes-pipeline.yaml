@@ -20,6 +20,7 @@ variables:
 
 stages:
 - stage: Build
+  condition: false
   displayName: Build stage
   jobs:
   - job: Build
@@ -78,8 +79,8 @@ stages:
               kubernetesCluster: 'hwkube-21422'
               namespace: 'default'
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(Pipeline.Workspace)/manifests/deployment.yaml
+                $(Pipeline.Workspace)/manifests/service.yaml
               containers: '$(containerRegistry)/$(imageRepository):$(tag)'
               imagePullSecrets: '$(imagePullSecret)'
 
