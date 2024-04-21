@@ -21,6 +21,8 @@ spec:
       containers:
         - image: devopswebappcontreg.azurecr.io/helloworlddotnetwebapp
           name: helloworldcontainer
+          ports:
+            - containerPort: 5000
 #      imagePullSecrets:
 #        - name: myacrsecret
       
