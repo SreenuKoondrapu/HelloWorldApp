@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hwapp-replicaset
+  labels:
+    app: hwapp
+    type: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hwapp
+      type: frontend   
+  template:
+    metadata:
+      name: hwapp-pod
+      labels:
+        app: hwapp
+        type: frontend
+    spec:
+      containers:
+        - image: devopswebappcontreg.azurecr.io/helloworlddotnetwebapp
+          name: helloworldcontainer
+#      imagePullSecrets:
+#        - name: myacrsecret
+      
