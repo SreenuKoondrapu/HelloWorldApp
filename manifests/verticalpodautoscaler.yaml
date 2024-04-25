@@ -3,7 +3,7 @@ kind: VerticalPodAutoscaler
 metadata:
   name: helloworld-vpa
 spec:
-  TargetRef:
+  targetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: hwapp-replicaset
