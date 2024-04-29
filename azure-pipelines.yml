@@ -46,7 +46,7 @@ steps:
   inputs:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'container'
-  #  dockerImageName: 'helloworlddotnetwebapp'
+    dockerImageName: 'devopswebappcontreg.azurecr.io/helloworlddotnetwebapp'
     dockerfilePath: Dockerfile 
     monitorWhen: 'always'
     failOnIssues: true
