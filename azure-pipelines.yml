@@ -46,7 +46,7 @@ steps:
   inputs:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'container'
-    dockerImageName: 'helloworlddotnetwebapp'
+  #  dockerImageName: 'helloworlddotnetwebapp'
     dockerfilePath: Dockerfile 
     monitorWhen: 'always'
     failOnIssues: true
@@ -88,7 +88,7 @@ steps:
     zipAfterPublish: true
 
 - task: CopyFiles@2
-  condition: true
+  condition: false
   displayName: 'Copy Terraform files to artifacts'
   inputs:
     SourceFolder: Terraform
