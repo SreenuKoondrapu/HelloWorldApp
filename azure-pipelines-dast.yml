@@ -1,0 +1,18 @@
+trigger:
+- '*'
+pool:
+  name: 'MyAgentPool' 
+steps:
+- script: |
+      wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
+      tar -xvf ZAP_2.14.0_Linux.tar.gz
+      cd ZAP_2.14.0
+      chmod -R 777 ./
+      ./zap.sh -cmd -quickurl https://devops-webapplication-asp.azurewebsites.net -quickprogress -quickout /zap_report.html 
+      echo '$(Build.ArtifactStagingDirectory)'
+  displayName: "Integrate DAST scan using OWASP ZAP in ADO DevSecOps Pipeline"
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: zap_report.html
