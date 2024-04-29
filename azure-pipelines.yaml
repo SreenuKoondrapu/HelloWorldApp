@@ -25,7 +25,7 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: 'SreenuKoondrapu_HelloWorldWebApp'
     projectName: 'HelloWorldWebApp'
-
+# SNYK SECURITY TESTING FOR SAST, SCA AND CONTAINER 
 - task: SnykSecurityScan@1
   condition: false
   displayName: Snyk SAST Testing Step
@@ -42,8 +42,18 @@ steps:
     testType: 'app'
     failOnIssues: false
 
+- task: SnykSecurityScan@1
+  inputs:
+    serviceConnectionEndpoint: 'helloworldsnykconnection'
+    testType: 'container'
+    dockerImageName: 'helloworlddotnetwebapp'
+    dockerfilePath: $(dockerfilePath)
+    monitorWhen: 'always'
+    failOnIssues: true
+# END OF SNYK COMPONENTS FOR SECURITY TESTING
+
 - task: Docker@2
-  condition: true
+  condition: false
   displayName: Build and push an image to container registry
   inputs:
     command: buildAndPush
@@ -85,7 +95,7 @@ steps:
     TargetFolder: '$(build.artifactstagingdirectory)/Terraform'
 
 - task: PublishBuildArtifacts@1
-  condition: true
+  condition: false
   displayName: 'Build Artifact Step'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
