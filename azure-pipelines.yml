@@ -47,7 +47,7 @@ steps:
     serviceConnectionEndpoint: 'helloworldsnykconnection'
     testType: 'container'
     dockerImageName: 'helloworlddotnetwebapp'
-    dockerfilePath: $(dockerfilePath)
+    dockerfilePath: Dockerfile 
     monitorWhen: 'always'
     failOnIssues: true
 # END OF SNYK COMPONENTS FOR SECURITY TESTING
